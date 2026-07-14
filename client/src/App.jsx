@@ -4,30 +4,43 @@ import { Provider, useSelector } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
 import { store } from './redux/store';
 
+// Base Pages
 import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
 import VerifyOtp from './pages/VerifyOtp';
+
+// Faculty & Admin Components
 import FacultyManagement from './pages/FacultyManagement';
 import StudentUpload from './pages/StudentUpload';
 import AttendanceCalendar from './pages/AttendanceCalendar';
 import AiInsights from './pages/AiInsights';
 import FacultyDashboard from './pages/FacultyDashboard';
 
-// Enhanced ProtectedRoute with explicit fallback check
+// Student Portal Components
+import StudentDashboard from './pages/StudentDashboard';
+import StudentAttendance from './pages/StudentAttendance';
+import StudentResults from './pages/StudentResults';
+import StudentTimetable from './pages/StudentTimetable';
+import StudentProfile from './pages/StudentProfile';
+import StudentReports from './pages/StudentReports';
+import StudentChatbot from './pages/StudentChatbot';
+import StudentExam from './pages/StudentExam';
+
+// Parent Components
+import ParentDashboard from './pages/ParentDashboard';
+
+// Role-Based Protection Guard
 function ProtectedRoute({ children, role }) {
   const { user, loading } = useSelector(state => state.auth);
 
-  // 1. Wait if your Redux state has a loading flag
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center text-xs text-gray-500">Loading...</div>;
   }
 
-  // 2. If no user session exists, redirect straight to landing/login
   if (!user) {
     return <Navigate to="/" replace />;
   }
 
-  // 3. If a specific role is required but user role doesn't match, send back
   if (role && user.role !== role) {
     return <Navigate to="/" replace />;
   }
@@ -54,6 +67,19 @@ export default function App() {
           <Route path="/faculty/dashboard" element={<ProtectedRoute role="FACULTY"><FacultyDashboard /></ProtectedRoute>} />
           <Route path="/faculty/calendar" element={<ProtectedRoute role="FACULTY"><AttendanceCalendar /></ProtectedRoute>} />
           <Route path="/faculty/insights" element={<ProtectedRoute role="FACULTY"><AiInsights /></ProtectedRoute>} />
+          
+{/* Student Portal Routes */}
+          <Route path="/student/dashboard" element={<StudentDashboard />} />
+          <Route path="/student/attendance" element={<StudentAttendance />} />
+          <Route path="/student/results" element={<StudentResults />} />
+          <Route path="/student/timetable" element={<StudentTimetable />} />
+          <Route path="/student/profile" element={<StudentProfile />} />
+          <Route path="/student/reports" element={<StudentReports />} />
+          <Route path="/student/ai-chat" element={<StudentChatbot />} />
+          <Route path="/student/exam" element={<StudentExam />} />
+          
+          {/* Parent Portal Routes */}
+          <Route path="/parent/dashboard" element={<ParentDashboard />} />
           
           {/* Catch-All Fallback Route */}
           <Route path="*" element={<Navigate to="/" replace />} />

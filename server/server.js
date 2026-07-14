@@ -1,28 +1,11 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-
-// Route Imports
-import authRoutes from './routes/authRoutes.js';
-import facultyRoutes from './routes/facultyRoutes.js';
-import studentRoutes from './routes/studentRoutes.js';
-import attendanceRoutes from './routes/attendanceRoutes.js';
-import aiRoutes from './routes/aiRoutes.js';
-
-dotenv.config();
-
-const app = express();
-
-// Middlewares
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173', credentials: true }));
-app.use(express.json());
+// ... (your existing code above)
 
 // API Endpoints Mount
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/faculty', facultyRoutes);
 app.use('/api/v1/students', studentRoutes);
 app.use('/api/v1/attendance', attendanceRoutes);
+
 app.use('/api/v1/ai', aiRoutes);
 
 // Health Check Route
@@ -32,6 +15,11 @@ app.get('/api/health', (req, res) => {
     database: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected', 
     server: 'Running' 
   });
+});
+
+// ADD THIS NEW ROOT ROUTE HERE 👇
+app.get('/', (req, res) => {
+  res.send('Unismart Server is up and running successfully!');
 });
 
 // Database Connection & Server Startup
